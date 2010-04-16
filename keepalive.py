@@ -255,7 +255,10 @@ class KeepAliveHandler:
         r.msg = r.reason
         
         if r.status == 200 or not HANDLE_ERRORS:
-            return r
+            resp = urllib2.addinfourl(r, r.msg, req.get_full_url())
+            resp.code = r.status
+            resp.msg = r.reason
+            return resp
         else:
             return self.parent.error('http', req, r,
                                      r.status, r.msg, r.headers)
